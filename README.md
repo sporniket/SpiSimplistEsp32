@@ -9,6 +9,10 @@ GPL v3
 
 ## What's new
 
+### v0.0.2
+
+* Allow to specify some specific settings in the bus driver and the device.
+
 ### v0.0.1
 
 Initial publishing, extracted from working code.

@@ -1,6 +1,6 @@
 {
     "name": "SpiSimplistEsp32",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "C++ library for PlatformIO, a fluent syntax to specify the SPI settings of a platform, taylored for the espressif32 platform.",
     "keywords": "SPI, esp32, espressif32, espidf",
     "dependencies": {
