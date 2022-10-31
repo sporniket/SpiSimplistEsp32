@@ -28,6 +28,7 @@
 // project includes
 #include "SpiSimplist.hpp"
 #include "SpiSimplistEsp32Types.hpp"
+#include "SpiSimplistEsp32Specs.hpp"
 
 /** @brief What the class is for.
  */
@@ -40,10 +41,11 @@ class SpiSimplistEsp32Builder {
 
     public:
     virtual ~SpiSimplistEsp32Builder();
-    SpiSimplistEsp32Builder *withHostSpecs(SpiIdentifier id, SpiSerialPinsMappingSpecs *serialPins) {
+    SpiSimplistEsp32Builder *withHostSpecs(SpiIdentifier id, SpiSerialPinsMappingSpecs *serialPins, SpiSimplistEsp32BusConfigAsHostSpecs* extra) {
         
         hostSpecs[id] = (new SpiHostSpecs(id)) //
-                                ->withSerialPins(serialPins);
+                                ->withSerialPins(serialPins)//
+                                ->withExtraSpecs(extra);
         return this;
     }
     SpiSimplistEsp32Builder *withDeviceForHostSpecs(SpiIdentifier id, SpiDeviceForHostSpecs *specs) {

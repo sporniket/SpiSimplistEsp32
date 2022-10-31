@@ -28,6 +28,7 @@
 #include "SpiSimplist.hpp"
 
 #include "SpiSimplistEsp32Types.hpp"
+#include "SpiSimplistEsp32Specs.hpp"
 #include "SpiSimplistEsp32Builder.hpp"
 
 #endif

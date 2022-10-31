@@ -2,23 +2,23 @@
 // ---
 // This file is part of 'SpiSimplistEsp32'.
 // ---
-// 'SpiSimplistEsp32' is free software: you can redistribute it and/or 
-// modify it under the terms of the GNU General Public License as published 
-// by the Free Software Foundation, either version 3 of the License, or 
+// 'SpiSimplistEsp32' is free software: you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// 'SpiSimplistEsp32' is distributed in the hope that it will be useful, 
-// but WITHOUT ANY WARRANTY; without even the implied warranty of 
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+// 'SpiSimplistEsp32' is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
 // Public License for more details.
 
-// You should have received a copy of the GNU General Public License along 
+// You should have received a copy of the GNU General Public License along
 // with 'SpiSimplistEsp32'. If not, see <https://www.gnu.org/licenses/>. 
 
 // header include
 #include "SpiSimplistEsp32Builder.hpp"
 
-SpiSimplistEsp32Builder::~SpiSimplistEsp32Builder(){}
+SpiSimplistEsp32Builder::~SpiSimplistEsp32Builder() {}
 // write code here...
 
 static const char *TAG_SPI_SIMPLIST_ESP32_BUILDER = "SpiSimplistEsp32Builder";
@@ -44,6 +44,7 @@ SpiSimplistEsp32 *SpiSimplistEsp32Builder::build() {
 void SpiSimplistEsp32Builder::buildHost(SpiSimplistEsp32 *spi, SpiIdentifier idHost) {
     esp_err_t ret;
     SpiHostSpecs *host = hostSpecs[idHost];
+    SpiSimplistEsp32BusConfigAsHostSpecs* extra = (SpiSimplistEsp32BusConfigAsHostSpecs*) host->getExtraSpecs() ;
     spi_bus_config_t buscfg = {.mosi_io_num = host->getSerialPins()->getDataOut(),
                                .miso_io_num = host->getSerialPins()->getDataIn(),
                                .sclk_io_num = host->getSerialPins()->getClock(),
@@ -53,7 +54,7 @@ void SpiSimplistEsp32Builder::buildHost(SpiSimplistEsp32 *spi, SpiIdentifier idH
                                .data5_io_num = -1,
                                .data6_io_num = -1,
                                .data7_io_num = -1,
-                               .max_transfer_sz = 0, // 4092
+                               .max_transfer_sz = extra->getMaxTransfertSize(), // 4092
                                .flags = SPICOMMON_BUSFLAG_MASTER,
                                .intr_flags = 0};
     ESP_LOGV(TAG_SPI_SIMPLIST_ESP32_BUILDER, "will spi_bus_initialize...");
@@ -64,6 +65,8 @@ void SpiSimplistEsp32Builder::buildHost(SpiSimplistEsp32 *spi, SpiIdentifier idH
          it != host->getDevices()->end(); ++it) {
         ESP_LOGV(TAG_SPI_SIMPLIST_ESP32_BUILDER, "Preparing device #%d...", it->first);
         SpiDeviceForHostSpecs *device = it->second;
+        SpiSimplistEsp32DeviceInterfaceConfigSpecs *extra =
+                (SpiSimplistEsp32DeviceInterfaceConfigSpecs *)device->getExtraSpecs();
         spi_device_interface_config_t *devcfg = new spi_device_interface_config_t;
         devcfg->command_bits = 0;
         devcfg->address_bits = 0;
@@ -75,10 +78,8 @@ void SpiSimplistEsp32Builder::buildHost(SpiSimplistEsp32 *spi, SpiIdentifier idH
         devcfg->clock_speed_hz = (int)device->getClockFrequency();
         devcfg->input_delay_ns = 0;
         devcfg->spics_io_num = device->getSelectPin();
-        devcfg->flags =
-                SPI_DEVICE_HALFDUPLEX |
-                SPI_DEVICE_NO_DUMMY, // FIXME give a way to setup // SPI_DEVICE_3WIRE for ST7789 with serial interface 1
-                devcfg->queue_size = 7; // FIXME give a way to setup
+        devcfg->flags = extra->getFlags() ;
+        devcfg->queue_size = extra->getQueueSize() ;
         SpiDeviceOfHostIdentifier id =
                 SpiIdentifierHelper::deviceOfHostIdFromIdHostIdDevice(host->getId(), device->getId());
         if (hostToDevicePreTransactionListeners.count(id) > 0) {
