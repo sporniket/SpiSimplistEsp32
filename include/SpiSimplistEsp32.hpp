@@ -27,8 +27,6 @@
 // project includes
 #include "SpiSimplist.hpp"
 
-static const char *TAG_SPI_SIMPLIST_ESP32 = "SpiSimplistEsp32";
-
 #include "SpiSimplistEsp32Types.hpp"
 #include "SpiSimplistEsp32Builder.hpp"
 

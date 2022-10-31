@@ -20,11 +20,13 @@
 
 // standard includes
 #include <cstdint>
+#include <map>
 
 // esp32 includes
+#include "driver/spi_master.h"
 
 // project includes
-
+#include "SpiSimplist.hpp"
 
 class HostToDevicePreTransactionListenerMapping {
     private:
