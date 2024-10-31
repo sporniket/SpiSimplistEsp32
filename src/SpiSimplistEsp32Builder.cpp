@@ -76,6 +76,7 @@ void SpiSimplistEsp32Builder::buildHost(SpiSimplistEsp32 *spi, SpiIdentifier idH
         devcfg->cs_ena_pretrans = 0;
         devcfg->cs_ena_posttrans = 0;
         devcfg->clock_speed_hz = (int)device->getClockFrequency();
+        devcfg->clock_source = SPI_CLK_SRC_DEFAULT ;
         devcfg->input_delay_ns = 0;
         devcfg->spics_io_num = device->getSelectPin();
         devcfg->flags = extra->getFlags() ;
