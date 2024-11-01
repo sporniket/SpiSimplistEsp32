@@ -56,6 +56,7 @@ void SpiSimplistEsp32Builder::buildHost(SpiSimplistEsp32 *spi, SpiIdentifier idH
                                .data7_io_num = -1,
                                .max_transfer_sz = extra->getMaxTransfertSize(), // 4092
                                .flags = SPICOMMON_BUSFLAG_MASTER,
+                               .isr_cpu_id = ESP_INTR_CPU_AFFINITY_AUTO,
                                .intr_flags = 0};
     ESP_LOGV(TAG_SPI_SIMPLIST_ESP32_BUILDER, "will spi_bus_initialize...");
     ret = spi_bus_initialize((spi_host_device_t)idHost, &buscfg, SPI_DMA_CH_AUTO);
